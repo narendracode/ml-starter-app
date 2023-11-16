@@ -9,8 +9,10 @@ from PIL import Image
 from flask import Flask, jsonify, request
 from tensorflow.keras.applications.resnet50 import preprocess_input, decode_predictions
 import json
+from sentence_transformers import SentenceTransformer
 
 model = tf.keras.models.load_model('model.h5')
+sentenceTransformModel = SentenceTransformer('sentence-transformers/msmarco-MiniLM-L-12-v3')
 
 class animal:
     def __init__(self, name, prediction):
@@ -56,3 +58,10 @@ def infer_image():
     img = prepare_image(img_bytes)
 
     return jsonify(predict_result(img))
+
+@app.route('/transform', methods=['POST'])
+def transform_sentence():
+    sentence = request.json['sentence']
+    print("Calculating embeddings for : ",sentence)
+    embeddings = sentenceTransformModel.encode(sentence)
+    return jsonify( embeddings=embeddings.tolist())

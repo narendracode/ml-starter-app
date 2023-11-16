@@ -4,3 +4,4 @@ image==1.5.33
 keras==2.14.0
 numpy==1.26.1
 tensorflow==2.14.0
+sentence-transformers==2.2.2
